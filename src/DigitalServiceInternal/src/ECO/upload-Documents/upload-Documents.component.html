@@ -1,0 +1,48 @@
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseOne">
+        {{'EQS.uploadedDocuments' | translate}}
+    </div>
+    <div id="collapseOne" class="collapse show">
+        <div class="card-body">
+            <div class="col-md-12 eqs-row">
+                <p-table styleClass="pTable" [value]="uploadedDocumentDetails" dataKey="documentName">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                            <th style="width: 90%;">{{'Common.documentsName' | translate}}</th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded">
+                        <tr class="ui-widget-header" *ngIf="rowGroupMetadata[rowData.documentName].index === rowIndex">
+                            <td colspan="3">
+                                <a href="#" [pRowToggler]="rowData">
+                                    <i [ngClass]="expanded ? 'pi pi-fw pi-chevron-circle-down' : 'pi pi-fw pi-chevron-circle-right'"
+                                        style="vertical-align: middle;padding-bottom: .1em;"></i>
+                                    <span>{{rowData.documentName}}</span>
+                                </a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-rowData let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{rowData.customerFileName}}</td>
+                            <td><i class="pi pi-download" title="{{'Common.download' | translate}}"
+                                    (click)="downloadUploadedFile(rowData);"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" styleClass="dialog-box"
+    [(visible)]="displayInformationPopUp">
+    <EAD-information-dialog (closeInformationPopUp)="closeInformationPopUp();">
+    </EAD-information-dialog>
+</p-dialog>
+<div *ngIf="showLoader">
+    <EAD-loader></EAD-loader>
+</div>

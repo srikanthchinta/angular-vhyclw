@@ -1,0 +1,133 @@
+<div class="card mt-4">
+    <div class="card-header">{{pageTitle}}</div>
+    <div class="card-body">
+        <div class="row eqs-row">
+            <div class="col-md-4 d-table p-0">
+                <div class="form-group d-table-row">
+                    <label class="d-table-cell">{{'EQS.projectName' | translate}}:</label>
+                    <span class="lang-RB d-table-cell">{{facilityName.value}}</span>
+                </div>
+            </div>
+            <div class="col-md-4 d-table p-0">
+                <div class="form-group d-table-row">
+                    <label class="d-table-cell">{{'EQS.licenseIssuanceEntiry' | translate}}:</label>
+                    <span class="lang-RB d-table-cell">{{externalEntityLicenseNumber.value}}</span>
+                </div>
+            </div>
+            <div class="col-md-4 d-table p-0">
+                <div class="form-group d-table-row">
+                    <label class="d-table-cell">{{'EQS.licenseNumber' | translate}}:</label>
+                    <span class="lang-RB d-table-cell">{{licenseNumber.value}}</span>
+                </div>
+            </div>
+            <div class="col-md-4 d-table p-0">
+                <div class="form-group d-table-row">
+                    <label class="d-table-cell">{{'EQS.selectedApplicationNumber' | translate}}:</label>
+                    <span class="lang-RB d-table-cell">{{applicationNumber.value}}</span>
+                </div>
+            </div>
+            <div class="col-md-4 d-table p-0">
+                <div class="form-group d-table-row">
+                    <label class="d-table-cell">{{'Common.dueDate' | translate}}:</label>
+                    <span class="lang-RB d-table-cell">{{dueDate.value | date: displayDateFormat}}</span>
+                </div>
+            </div>
+            <div class="col-md-4 d-table p-0">
+                <div class="form-group d-table-row">
+                    <label class="d-table-cell">{{'Common.legacyApplicationNumber' | translate}}:</label>
+                    <span class="lang-RB d-table-cell">{{legacyApplicationNumber.value}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 d-table p-0">
+                <p-table [value]="applicationHistoryData" styleClass="pTable" [paginator]="true" [(first)]="first"
+                    [rows]="gridPageSize">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="serialNumberColumnWidth">
+                                {{'Common.serialNumber' | translate}}
+                            </th>
+                            <th pSortableColumn="applicationNumber">{{'Common.applicationNumber' | translate}}
+                                <p-sortIcon field="applicationNumber"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="subServiceName">{{'EQS.applicationType' | translate}}
+                                <p-sortIcon field="subServiceName"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="submittedOn">{{'EQS.submissionOn' | translate}}
+                                <p-sortIcon field="submittedOn"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="status">{{'Common.status' | translate}}
+                                <p-sortIcon field="status"></p-sortIcon>
+                            </th>
+                            <th class="actionColumnWidth"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{rowData.applicationNumber}}</td>
+                            <td>{{rowData.subServiceName}}</td>
+                            <td>{{rowData.submittedOn | date: displayDateFormat}}</td>
+                            <td>{{rowData.status}}</td>
+                            <td class="text-center">
+                                <span class="pi-icons" (click)="getApplicationHeader(rowData.eqsApplicationId)">
+                                    <i class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <p-tabView [activeIndex]="deafultTabActiveIndex" styleClass="tab-set" class="w-100"
+                (onChange)="onTabViewChange($event);" [ngClass]="('lang'|translate) == 'en' ? 'ui-ltr' : 'ui-rtl'">
+                <p-tabPanel header="{{'EQS.admin' | translate}}">
+                    <eqs-adminstrative-details></eqs-adminstrative-details>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.technical' | translate}}">
+                    <eqs-technical-details></eqs-technical-details>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.sectorQuestions' | translate}}">
+                    <eqs-sector-specific-questions-details></eqs-sector-specific-questions-details>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.criticalQuestions' | translate}}">
+                    <eqs-critical-questions-details></eqs-critical-questions-details>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.nonCriticalQuestions' | translate}}">
+                    <eqs-non-critical-questions-details></eqs-non-critical-questions-details>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.uploadedDocuments' | translate}}">
+                    <eqs-uploaded-documents-details></eqs-uploaded-documents-details>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.permitSection' | translate}}">
+                    <eqs-permit-section></eqs-permit-section>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.studies' | translate}}">
+                    <eqs-studies></eqs-studies>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQS.reports' | translate}}">
+                    <eqs-reports></eqs-reports>
+                </p-tabPanel>
+                <p-tabPanel header="{{'EQSInspectionHisotry.inspectionHistory' | translate}}">
+                    <eqs-inspection-history></eqs-inspection-history>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+    <div class="col-md-12 d-flex">
+        <diV class="col-md-1 home-image"><a href="javascript:void(0);" class="home-icon"><i class="pi pi-home"
+                    (click)="backToDashboard();"></i></a></diV>
+        <div class="col-md-10"></div>
+        <div class="col-md-1 nav-icons">
+            <a href="javascript:void(0);" (click)="goToPreviousTab();">
+                <img class="m-1 w-40" src='./assets/images/prev.svg'></a>
+            <a href="javascript:void(0);" (click)="goToNextTab();">
+                <img class="m-1 w-40" src='./assets/images/next.svg'></a>
+        </div>
+    </div>
+</div>
+<div *ngIf="showLoader">
+    <EAD-loader></EAD-loader>
+</div>

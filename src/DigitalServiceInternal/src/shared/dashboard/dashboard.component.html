@@ -1,0 +1,107 @@
+<div class="card mt-4">
+  <div class="card-header">{{'CommonApplicationDashBoard.dashboard' | translate}}</div>
+  <div class="card-body">
+    <form [formGroup]="searchForm">
+      <div class="row search-menu">
+        <div class="col-lg-3 col-md-12 d-flex m-b-1" style="align-items: center;">
+          <label class="col-lg-5 col-md-2">{{'CommonApplicationDashBoard.service' | translate}}:</label>
+          <p-dropdown [options]="serviceData" styleClass="dropdown-width lang-RR" [style]="{'width': '100%'}"
+            formControlName="selectedSerice" optionLabel="label" (onChange)="serviceChange()"></p-dropdown>
+        </div>
+        <div class="col-lg-9 col-md-12 d-flex" style="align-items: center;">
+          <label class="col-lg-5 col-md-2">{{'CommonApplicationDashBoard.search' | translate}}:</label>
+          <input class="form-control ml-1 mr-1 col-lg-4 col-md-6 input-text" type="text" formControlName="searchValue"
+            placeholder="{{'CommonApplicationDashBoard.searchPlaceholder' | translate}}"
+            (keydown)="onSearchTextBoxKeydown($event)">
+          <img class="search-img" src="assets/images/search.svg" alt="search" (click)="searchCustomerDetails()">
+          <button class="button primary-small search-button lang-RB" (click)="clearData()"
+            type="button">{{'CommonApplicationDashBoard.clear' | translate}}</button>
+        </div>
+        <hr />
+      </div>
+    </form>
+    <div class="row m-0" *ngIf="showDataTable">
+      <p-table [value]="dashbordData" [lazy]="true" styleClass="lang-RR" (onLazyLoad)="loadDashboardLazy($event)"
+        [paginator]="true" [(first)]="first" [rows]="pageSize" [totalRecords]="totalRecords">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="description">{{'CommonApplicationDashBoard.requestType' | translate}}
+              <p-sortIcon field="description"></p-sortIcon>
+            </th>
+            <th pSortableColumn="location">{{'CommonApplicationDashBoard.location' | translate}}
+              <p-sortIcon field="location"></p-sortIcon>
+            </th>
+            <th pSortableColumn="serviceName">{{'CommonApplicationDashBoard.serviceName' | translate}}
+              <p-sortIcon field="serviceName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="applicationNumber">{{'CommonApplicationDashBoard.applicationNumber' | translate}}
+              <p-sortIcon field="applicationNumber"></p-sortIcon>
+            </th>
+            <th pSortableColumn="customerName">{{'CommonApplicationDashBoard.customerName' | translate}}
+              <p-sortIcon field="customerName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="claimedBy">{{'CommonApplicationDashBoard.claimedBy' | translate}}
+              <p-sortIcon field="claimedBy"></p-sortIcon>
+            </th>
+            <th pSortableColumn="applicationRoleName">{{'CommonApplicationDashBoard.applicationRoleName' | translate}}
+              <p-sortIcon field="applicationRoleName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="SubmittedOn">{{'CommonApplicationDashBoard.submissionDate' | translate}}
+              <p-sortIcon field="SubmittedOn"></p-sortIcon>
+            </th>
+            <th pSortableColumn="dueDate">{{'CommonApplicationDashBoard.dueDate' | translate}}
+              <p-sortIcon field="dueDate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">{{'CommonApplicationDashBoard.status' | translate}}
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th style="width: 7%;">{{'CommonApplicationDashBoard.action' | translate}}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+          <tr>
+            <td>{{rowData.description}}</td>
+            <td>{{rowData.location}}</td>
+            <td>{{rowData.serviceName}}</td>
+            <td><a href="javascript:void(0)" style="color: blue;"
+                (click)="applicationNoClick(rowData)">{{rowData.applicationNumber}}</a></td>
+            <td>{{rowData.customerName}}</td>
+            <td>{{rowData.claimedBy}}</td>
+            <td>{{rowData.applicationRoleName}}</td>
+            <td>{{rowData.submittedOn | date: displayDateFormat}}</td>
+            <td>{{rowData.dueDate | date: displayDateFormat}}</td>
+            <td>{{rowData.status}}</td>
+            <td *ngIf="rowData.reClaim==true"><a href="javascript:void(0)" style="color: blue;"
+                (click)="openDialog(rowData)">{{'CommonApplicationDashBoard.reClaim' | translate}}</a></td>
+            <td *ngIf="rowData.claim==true"><a href="javascript:void(0)" style="color: blue;"
+                (click)="claimAction(rowData)">{{'CommonApplicationDashBoard.claim' | translate}}</a></td>
+            <td *ngIf="rowData.revokeClaim==true"><a href="javascript:void(0)" style="color: blue;"
+                (click)="revokeClaimAction(rowData)">{{'CommonApplicationDashBoard.revoke' | translate}}</a></td>
+            <td *ngIf="rowData.revokeClaim==false && rowData.claim==false  && rowData.reClaim==false"></td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div *ngIf="noDataFound" class="lang-RB">
+      {{'CommonApplicationDashBoard.noRecordsFound' | translate}}
+    </div>
+    <p-dialog header="{{'CommonApplicationDashBoard.confirmation' | translate}}" [(visible)]="displayDialog"
+      [style]="{width: '30vw'}" [baseZIndex]="10000" styleClass="lang-RR">
+      {{'CommonApplicationDashBoard.confirmationMessage' | translate}}
+      <p-footer>
+        <input type="button" class="button primary-small" value="{{'CommonApplicationDashBoard.yes' | translate}}"
+          (click)="reClaimAction()"> &nbsp;
+        <input type="button" class="button secondary-small" value="{{'CommonApplicationDashBoard.no' | translate}}"
+          (click)="displayDialog=false">
+      </p-footer>
+    </p-dialog>
+  </div>
+</div>
+<div *ngIf="showLoadingIndicator">
+  <EAD-loader></EAD-loader>
+</div>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" styleClass="dialog-box"
+  [(visible)]="displayInformationPopUp">
+  <EAD-information-dialog (closeInformationPopUp)="closeInformationPopUp();">
+  </EAD-information-dialog>
+</p-dialog>

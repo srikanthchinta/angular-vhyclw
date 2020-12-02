@@ -1,0 +1,11 @@
+<div class="content-align lang-RR" dir={{appDirection}}>
+   <div class="container-fluid fixed-header">
+      <EAD-header [isAppLanguageEnglish]="isAppLanguageEnglish" (setAppLanguage)="setAppLanguage();"></EAD-header>
+   </div>
+   <div class="container-fluid mb-4">
+      <router-outlet></router-outlet>
+   </div>
+   <div class="container-fluid" style="padding: 0;position: absolute;bottom: 0;" *ngIf="router.url !== '/login'">
+      <EAD-footer> </EAD-footer>
+   </div>
+</div>

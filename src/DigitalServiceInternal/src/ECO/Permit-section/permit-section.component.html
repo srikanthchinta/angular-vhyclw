@@ -1,0 +1,636 @@
+<div class="text-right">
+    <a href="javascript:void(0);" onclick=" $('.perm-collapse').removeClass('show');">
+        <img class="m-1" fill="#008761" src='./assets/images/collapse_all.svg'></a>
+    <a href="javascript:void(0);" onclick=" $('.perm-collapse').addClass('show');">
+        <img class="m-1" fill="#008761" src='./assets/images/expand_all.svg'></a>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseEight">
+        {{'ECOPermitSection.activities' | translate}}
+    </div>
+    <div id="collapseEight" class="collapse perm-collapse show">
+        <div class="card-body text-justify">
+            <p-table [value]="activitiesDetails" styleClass="pTable" [paginator]="true"
+                [(first)]="activitiesGridFirstPage" [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'EQSActivities.activityCode' | translate}}</th>
+                        <th>{{'EQSActivities.activityNameEng' | translate}}</th>
+                        <th>{{'EQSActivities.activityNameAr' | translate}}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.activityCode}}</td>
+                        <td>{{rowData.activityName}}</td>
+                        <td>{{rowData.activityNameAr}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseOne">
+        {{'ECO.projects' | translate}}
+    </div>
+    <div id="collapseOne" class="collapse perm-collapse">
+        <div class="card-body text-justify">
+            <p-table [value]="projectDetails" styleClass="pTable" [paginator]="true" [(first)]="projectsGridFirstPage"
+                [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'ECOPermitSection.name' | translate}}</th>
+                        <th>{{'ECOPermitSection.type' | translate}}</th>
+                        <th>{{'Common.fieldOfWork' | translate}}</th>
+                        <th>{{'ECOPermitSection.uploadEvidence' | translate}}</th>
+                        <th>{{'Common.status' | translate}}</th>
+                        <th> </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.projectName}}</td>
+                        <td>{{rowData.projectType}}</td>
+                        <td>{{rowData.ecoFieldWorkName}}</td>
+                        <td>
+                            <span class="pi-icons">
+                                <i class="pi pi-download" title="Download"
+                                    (click)="downloadDocuments(rowData.evidenceDocumnetId,rowData.evidenceDocumnetCustomerFileName)"></i>
+                            </span>
+                        </td>
+                        <td>{{rowData.approvalStatus}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" *ngIf="!(isPermitSectionReadOnly)"
+                                (click)="showViewProjectDetailsPopUp(rowData.id);">
+                                <a><i class="pi pi-pencil" title="Edit"></i></a>
+                            </span>
+                            <span class="pi-icons" *ngIf="(isPermitSectionReadOnly)"
+                                (click)="showViewProjectDetailsPopUp(rowData.id);">
+                                <i class="pi pi-eye" title="View"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseTwo">
+        {{'ECOPermitSection.technicalTeaminUAE' | translate}}
+    </div>
+    <div id="collapseTwo" class="collapse perm-collapse">
+        <div class="card-body text-justify" *ngIf="!newSubServiceReadOnly">
+            <div class="row mb-2">
+                <div style="font-weight: bold;" class="col-md-6 pt-2">
+                    {{'ECOPermitSection.teamFromPreviousApprovedApplication' | translate}}
+                </div>
+                <div class="col-md-6 text-center">
+                    {{'ECOPermitSection.applicationNumber' | translate}}:
+                    <span>{{previousApplicationNmber.value}}</span>
+                </div>
+            </div>
+            <p-table styleClass="pTable" [value]="previoustechnicalTeamsDetails" [paginator]="true"
+                [(first)]="previousteamsGridFirstPage" [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'ECOTechnicalTeamDetails.identityNumber' | translate}}</th>
+                        <th>{{'Common.specialistName' | translate}}</th>
+                        <th>{{'ECOTechnicalTeamDetails.sponsorName' | translate}}</th>
+                        <th>{{'Common.expiryDate' | translate}}</th>
+                        <th>{{'Common.experienceFieldOfWork' | translate}}</th>
+                        <th>{{'Common.status' | translate}}</th>
+                        <th> </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.identityNumber}}</td>
+                        <td>{{rowData.specialistName}}</td>
+                        <td>{{rowData.sponsorName}}</td>
+                        <td>{{rowData.expiryDate | date: displayDateFormat}}</td>
+                        <td>{{rowData.fieldWorkNames}}</td>
+                        <td>{{rowData.approvalStatus}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" (click)="showViewTeamDetailsPopUp(rowData.id,true);">
+                                <i class="pi pi-eye" title="View"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div class="card-body text-justify pt-0">
+            <div class="row mb-2">
+                <div style="font-weight: bold;" class="col-md-6 pt-2">
+                    {{'ECOPermitSection.teamFromSelectedApplication' | translate}}
+                </div>
+                <div class="col-md-6 text-center" *ngIf="!isPermitSectionReadOnly">
+                    <input class="button secondary-small" type="button" *ngIf="!isPermitSectionReadOnly"
+                        value="{{'ECOPermitSection.updatetechnicalTeams' | translate}}"
+                        (click)="UpdateTechnicalteams();">
+                </div>
+            </div>
+            <p-table styleClass="pTable" [value]="technicalTeamsDetails" [paginator]="true"
+                [(first)]="technicalteamsGridFirstPage" [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'ECOTechnicalTeamDetails.identityNumber' | translate}}</th>
+                        <th>{{'Common.specialistName' | translate}}</th>
+                        <th>{{'ECOTechnicalTeamDetails.sponsorName' | translate}}</th>
+                        <th>{{'Common.expiryDate' | translate}}</th>
+                        <th>{{'Common.experienceFieldOfWork' | translate}}</th>
+                        <th>{{'Common.status' | translate}}</th>
+                        <th> </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.identityNumber}}</td>
+                        <td>{{rowData.specialistName}}</td>
+                        <td>{{rowData.sponsorName}}</td>
+                        <td>{{rowData.expiryDate | date: displayDateFormat}}</td>
+                        <td>{{rowData.fieldWorkNames}}</td>
+                        <td>{{rowData.approvalStatus}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" *ngIf="!isPermitSectionReadOnly"
+                                (click)="showViewTeamDetailsPopUp(rowData.id,false);">
+                                <a><i class="pi pi-pencil" title="Edit"></i></a>
+                            </span>
+                            <span class="pi-icons" *ngIf="isPermitSectionReadOnly"
+                                (click)="showViewTeamDetailsPopUp(rowData.id,true);">
+                                <i class="pi pi-eye" title="View"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="card-body text-justify pt-0">
+            <div class="row mb-2">
+                <div style="font-weight: bold;" class="col-md-6 pt-2">
+                    {{'ECOPermitSection.technicalteamintegration' | translate}}
+                </div>
+            </div>
+            <p-table styleClass="pTable" [value]="technicalTeamsintegrationDetails" [paginator]="true"
+                [(first)]="teamsfromIntegrationGridFirstPage" [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'ECOTechnicalTeamDetails.identityNumber' | translate}}</th>
+                        <th>{{'Common.specialistName' | translate}}</th>
+                        <th>{{'ECOTechnicalTeamDetails.sponsorName' | translate}}</th>
+                        <th>{{'Common.expiryDate' | translate}}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.identityNumber}}</td>
+                        <td>{{rowData.specialistNameFromIntegration}}</td>
+                        <td>{{rowData.sponsorNameFromIntegration}}</td>
+                        <td>{{rowData.expiryDateFromIntegration | date: displayDateFormat}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseThree">
+        {{'ECOPermitSection.fieldsOfWork' | translate}}
+    </div>
+    <div id="collapseThree" class="collapse perm-collapse">
+        <div class="card-body text-justify">
+            <p-table styleClass="pTable" [value]="fieldWorkDetails" [paginator]="true"
+                [(first)]="fieldOfworkGridFirstPage" [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'Common.fieldOfWork' | translate}}</th>
+                        <th>{{'Common.status' | translate}}</th>
+                        <th> </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.fieldWorkName}}</td>
+                        <td>{{rowData.approvalStatus}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" *ngIf="!isPermitSectionReadOnly"
+                                (click)="showViewFieldsOfWorkPopUp(rowData.id);">
+                                <a><i class="pi pi-pencil" title="Edit"></i></a>
+                            </span>
+                            <span class="pi-icons" *ngIf="isPermitSectionReadOnly"
+                                (click)="showViewFieldsOfWorkPopUp(rowData.id);">
+                                <i class="pi pi-eye" title="View"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseFour">
+        {{'ECOPermitSection.facilityClassification' | translate}}
+    </div>
+    <div id="collapseFour" class="collapse perm-collapse">
+        <div class="card-body text-justify">
+            <div class="col-md-12" *ngIf="!newSubServiceReadOnly">
+                <form [formGroup]="permitSectionFromGroup">
+                    <div class="row d-flex mb-3">
+                        <div class="flex-fill">
+                            <label>{{'ECOPermitSection.fromDate' | translate}}:&nbsp;</label>
+                            <p-calendar [showButtonBar]="true" [showIcon]="true" placeholder={{datePlaceHolderFormat}}
+                                [maxDate]="toDate.value" [readonlyInput]="true" dateFormat={{primeNgDateDisplayFormat}}
+                                formControlName="fromDate">
+                            </p-calendar>
+                        </div>
+                        <div class="flex-fill">
+                            <label>{{'ECOPermitSection.toDate' | translate}}:&nbsp;</label>
+                            <p-calendar [showButtonBar]="true" [showIcon]="true" placeholder={{datePlaceHolderFormat}}
+                                [readonlyInput]="true" [minDate]="fromDate.value" [maxDate]="todayDate"
+                                dateFormat={{primeNgDateDisplayFormat}} formControlName="toDate">
+                            </p-calendar>
+                        </div>
+                        <div class="flex-fill">
+                            <label>{{'ECOPermitSection.consider' | translate}}:&nbsp;</label>
+                            <p-checkbox [binary]="true" formControlName="consider"></p-checkbox>
+                            <img class="search-img" src="assets/images/search.svg" alt="search"
+                                (click)="Serchfacilities()">
+                            <button class="button primary-small search-button lang-RB"
+                                (click)="clearfacilitysearchData()"
+                                type="button">{{'CommonApplicationDashBoard.clear' | translate}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <p-table styleClass="pTable" *ngIf="!newSubServiceReadOnly" [value]="facilityClassificationDetails"
+                [paginator]="true" [(first)]="facilitiesGridFirstPage" [rows]="gridPageSize"
+                [(selection)]="selectedfacilityRowData">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'Common.applicationNumber' | translate}}</th>
+                        <th>{{'ECOPermitSection.type' | translate}}</th>
+                        <th>{{'EQSStudies.compnayName' | translate}}</th>
+                        <th>{{'ECOPermitSection.eCOScore' | translate}}</th>
+                        <th>{{'ECO.submissionOn' | translate}}</th>
+                        <th>{{'ECOPermitSection.consideredForApplication' | translate}} </th>
+                        <th>{{'ECOPermitSection.considerationOn' | translate}} </th>
+                        <th> </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.applicationNumber}}</td>
+                        <td>{{rowData.type}}</td>
+                        <td>{{rowData.facilityName}}</td>
+                        <td>{{rowData.ecoScore}}</td>
+                        <td>{{rowData.submittedOn | date:displayDateFormat}}</td>
+                        <td>{{rowData.consideredApplicationNumber}}</td>
+                        <td>{{rowData.consideredForECOClasificationOn | date:displayDateFormat}}</td>
+                        <td>
+                            <p-tableCheckbox [value]=" rowData"
+                                [disabled]="rowData.isPreviouslyCosideredApplication || isPermitSectionReadOnly"
+                                (click)="CalculateAverageScore()">
+                            </p-tableCheckbox>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td colspan="3" style="text-align: right;">{{'ECOPermitSection.ecoAverageScore' | translate}}:
+                        </td>
+                        <td>{{averageECOScrore.value}}</td>
+                        <td colspan="5" style="text-align: right;"></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <form [formGroup]="permitSectionFromGroup">
+                <div class="row mt-2" *ngIf="!isPermitSectionReadOnly">
+                    <div class=" col-lg-4 col-md-4 d-table mt-1 middle" *ngIf="!newSubServiceReadOnly">
+                        <div class="d-table-row">
+                            <label class="d-table-cell">{{'ECOPermitSection.eCOScore' | translate}}:</label>
+                            <input class="d-table-cell" [pKeyFilter]="shouldAllowOnlyDecimal" type="text" maxlength="5"
+                                formControlName="eCOScore">
+                        </div>
+                        <div class="d-table-row"
+                            *ngIf="(eCOScore.touched || isFormSubmitted) && eCOScore.invalid && eCOScore.errors.required && (averageECOScrore.value > 0 && averageECOScrore.value)">
+                            <span class="d-table-cell"></span>
+                            <small class="required d-table-cell">
+                                {{'Common.isRequiredPre' | translate}}{{'ECOPermitSection.eCOScore' | translate}}{{'Common.isRequired' | translate}}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 d-table mt-1 middle">
+                        <div class="d-table-row">
+                            <label class="d-table-cell">{{'ECOPermitSection.eCOClass' | translate}}<span
+                                    class="required">*</span>:</label>
+                            <p-dropdown styleClass="d-table-cell" [options]="ecoClasses" formControlName="eCOClassId">
+                            </p-dropdown>
+                        </div>
+                        <div class="d-table-row"
+                            *ngIf="(eCOClassId.touched || isFormSubmitted) && eCOClassId.invalid && eCOClassId.errors.required && !isPermitSectionReadOnly">
+                            <span class="d-table-cell"></span>
+                            <small class="required">
+                                {{'Common.isRequiredPre' | translate}}{{'ECOPermitSection.eCOClass' | translate}}{{'Common.isRequired' | translate}}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-2">
+                        <input class="button primary-small m-1" *ngIf="!isPermitSectionReadOnly" type="button"
+                            value="{{'Common.save' | translate}}" (click)="saveClassifications();">
+                    </div>
+                </div>
+                <div class="row mt-2" *ngIf="isPermitSectionReadOnly">
+                    <div class=" col-lg-3 col-md-5 d-table" *ngIf="eCOScore.value">
+                        <div class="d-table-row">
+                            <label class="d-table-cell">{{'ECOPermitSection.eCOScore' | translate}}: </label>
+                            <span class="lang-RB d-table-cell">{{eCOScore.value}}</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-5 d-table" *ngIf="eCOClass.value">
+                        <div class="d-table-row">
+                            <label class="d-table-cell">{{'ECOPermitSection.eCOClass' | translate}}:</label>
+                            <span class="lang-RB d-table-cell">{{eCOClass.value}}</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseFive">
+        {{'ECOPermitSection.remarks' | translate}}
+    </div>
+    <div id="collapseFive" class="collapse perm-collapse">
+        <div class="card-body text-justify pt-2">
+            <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2 mb-2">
+                    <input class="button secondary-small" type="button" *ngIf="!isPermitSectionReadOnly"
+                        value="{{'ECOPermitSection.addRemarks' | translate}}" (click)="showAddViewRemarksPopUp();">
+                </div>
+            </div>
+            <p-table styleClass="pTable" [value]="remarkDetails" [paginator]="true" [(first)]="remarksGridFirstPage"
+                [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'Common.englishTitle' | translate}}</th>
+                        <th>{{'Common.arabicTitle' | translate}}</th>
+                        <th>{{'Common.englishDescription' | translate}}</th>
+                        <th>{{'Common.arabicDescription' | translate}}</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.titleEnglish}}</td>
+                        <td>{{rowData.titleArabic}}</td>
+                        <td>{{rowData.descriptionEnglish}}</td>
+                        <td>{{rowData.descriptionArabic}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" *ngIf="!isPermitSectionReadOnly"
+                                (click)="deleteRemarks(rowData.ecoRemarksId);">
+                                <a><i class="pi pi-trash" title="Delete"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseSix">
+        {{'ECOPermitSection.taskHistory' | translate}}
+    </div>
+    <div id="collapseSix" class="collapse perm-collapse">
+        <div class="card-body text-justify">
+            <p-table styleClass="pTable" [value]="applicationHistoryDetails" [paginator]="true"
+                [(first)]="statushistorygridGridFirstPage" [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th pSortableColumn="status">{{'Common.status' | translate}}
+                            <p-sortIcon field="status"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="actionBy">{{'Common.actionBy' | translate}}
+                            <p-sortIcon field="actionBy"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="actionRole">{{'Common.actionRole' | translate}}
+                            <p-sortIcon field="actionRole"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="actionDate">{{'Common.actionDate' | translate}}
+                            <p-sortIcon field="actionDate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="dueDate">{{'Common.dueDate' | translate}}
+                            <p-sortIcon field="dueDate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="isOverDueText">{{'EQSPermitSection.iSDelayed' | translate}}
+                            <p-sortIcon field="isOverDueText"></p-sortIcon>
+                        </th>
+                        <th>{{'Common.internalComments' | translate}}</th>
+                        <th class="actionColumnWidth"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.status}}</td>
+                        <td>{{rowData.actionBy}}</td>
+                        <td>{{rowData.actionRole}}</td>
+                        <td>{{rowData.actionDate | date: displayDateFormat }}</td>
+                        <td>{{rowData.dueDate | date: displayDateFormat}}</td>
+                        <td>{{rowData.isOverDueText}}</td>
+                        <td>{{rowData.internalComment}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" (click)="showViewApplocationHistoryPopUp(rowData.statusHistoryId);">
+                                <a><i class="pi pi-eye" title="View"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseSeven">
+        {{'EQSPermitSection.recommendation' | translate}}
+    </div>
+    <div id="collapseSeven" class="collapse perm-collapse">
+        <div class="card-body text-justify">
+            <form [formGroup]="permitSectionRecommandationFromGroup">
+                <div class="col-md-12 d-table mb-1" *ngIf="!isPermitSectionReadOnly && !newSubServiceReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'ECOPermitSection.restrictOffice' | translate}}:</label>
+                        <p-checkbox class="d-table-cell" formControlName="isrestrictOffice" [binary]="true"
+                            (click)="setValidationRestrictedtype()">
+                        </p-checkbox>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="isPermitSectionReadOnly && isrestrictOffice.value">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'ECOPermitSection.restrictOffice' | translate}}:</label>
+                        <span>{{isrestrictOfficeText.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="!isPermitSectionReadOnly && isrestrictOffice.value ">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'ECOPermitSection.restrictType' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-dropdown class="d-table-cell" [options]="restrictTypes" formControlName="restrictTypeId">
+                        </p-dropdown>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(restrictTypeId.touched || isFormSubmitted) && restrictTypeId.invalid && restrictTypeId.errors.required && isrestrictOffice.value">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required d-table-cell">{{'Common.isRequiredPre' | translate}}{{'ECOPermitSection.restrictType' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="isPermitSectionReadOnly && isrestrictOffice.value">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'ECOPermitSection.restrictType' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{restrictType.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="!isPermitSectionReadOnly && isrestrictOffice.value">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'ECOPermitSection.reasonForRestricting' | translate}}<span
+                                class="required">*</span>:</label>
+                        <textarea class="d-table-cell w-100" formControlName="reasonForRestricting"></textarea>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(reasonForRestricting.touched || isFormSubmitted) && reasonForRestricting.invalid && reasonForRestricting.errors.required && isrestrictOffice.value">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required d-table-cell">{{'Common.isRequiredPre' | translate}}{{'ECOPermitSection.reasonForRestricting' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="isPermitSectionReadOnly && isrestrictOffice.value">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'ECOPermitSection.reasonForRestricting' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{reasonForRestricting.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.internalComments' | translate}}:</label>
+                        <textarea class="d-table-cell w-100" [readonly]="isAllowedActionReadOnly"
+                            formControlName="internalComments"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.externalComments' | translate}}:</label>
+                        <textarea class="d-table-cell w-100" formControlName="externalComments"
+                            [readonly]="isPermitSectionReadOnly"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="isDelayed.value ">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.delayJustification' | translate}}<span
+                                class="required">*</span>:</label>
+                        <textarea class="d-table-cell w-100" formControlName="delayJustification"></textarea>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(delayJustification.touched || isFormSubmitted) && delayJustification.invalid && delayJustification.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required d-table-cell">{{'Common.isRequiredPre' | translate}}{{'Common.delayJustification' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.status' | translate}}: </label>
+                        <span class="lang-RB d-table-cell">{{status.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="!isAllowedActionReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.recommendedAction' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-dropdown class="d-table-cell" [options]="recommendedActions"
+                            formControlName="recommendedAction"></p-dropdown>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(recommendedAction.touched || isFormSubmitted) && recommendedAction.invalid && recommendedAction.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required d-table-cell">{{'Common.isRequiredPre' | translate}}{{'Common.recommendedAction' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 text-center">
+                    <input class="button primary-small m-1" *ngIf="!isAllowedActionReadOnly" type="button"
+                        value="{{'Common.submit' | translate}}" (click)="saveRecommandations();">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<p-dialog header="{{'ECOPermitSection.viewProjectDetails' | translate}}" [(visible)]="displayProjectDetailsPopUp"
+    [modal]="true" styleClass="dialog-box" [draggable]="false">
+    <eco-view-project-details *ngIf="approvalStatusDropDownValues"
+        [approvalStatusDropDownValues]="approvalStatusDropDownValues"
+        (closeProjectDetailsPopUp)="closeProjectDetailsPopUp($event);"
+        (downloadEvidenceDocument)="downloadDocument($event);">
+    </eco-view-project-details>
+</p-dialog>
+<p-dialog header="{{'ECOPermitSection.viewTeamDetails' | translate}}" [(visible)]="displayTeamDetailsPopUp"
+    [modal]="true" styleClass="dialog-box" [draggable]="false">
+    <eco-view-technical-team-details *ngIf="approvalStatusDropDownValues"
+        [approvalStatusDropDownValues]="approvalStatusDropDownValues"
+        (closeViewTeamDetailsPopUp)="closeViewTeamDetailsPopUp($event);"
+        (downloadtechnicalteamDocument)="downloadDocument($event)">
+    </eco-view-technical-team-details>
+</p-dialog>
+<p-dialog header="{{'ECOPermitSection.viewFieldOfWork' | translate}}" [(visible)]="displayFieldsOfWorkPopUp"
+    [modal]="true" styleClass="dialog-box" [draggable]="false">
+    <eco-view-fields-of-work *ngIf="approvalStatusDropDownValues"
+        [approvalStatusDropDownValues]="approvalStatusDropDownValues"
+        (closeViewFieldsOfWorkPopUp)="closeViewFieldsOfWorkPopUp($event);">
+    </eco-view-fields-of-work>
+</p-dialog>
+<p-dialog header="{{'ECOPermitSection.addRemarks' | translate}}" [(visible)]="displayAddViewRemarksPopUp" [modal]="true"
+    [style]="{width: '50vw','text-align': 'justify'}" [draggable]="false" styleClass="dialog-box">
+    <eco-add-view-remarks (closeAddViewRemarksPopUp)="closeAddViewRemarksPopUp();">
+    </eco-add-view-remarks>
+</p-dialog>
+<p-dialog header="{{'ECOPermitSection.viewTaskHistory' | translate}}" [(visible)]="displayViewTaskHistoryPopUp"
+    [modal]="true" [style]="{width: '50vw','text-align': 'justify'}" [draggable]="false" styleClass="dialog-box">
+    <eco-view-task-history (closeViewTaskHistoryPopUp)="closeViewTaskHistoryPopUp();">
+    </eco-view-task-history>
+</p-dialog>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" styleClass="dialog-box"
+    [(visible)]="displayInformationPopUp">
+    <EAD-information-dialog (closeInformationPopUp)="closeInformationPopUp();">
+    </EAD-information-dialog>
+</p-dialog>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" [(visible)]="displayConfirmationPopUp"
+    [resizable]="false" styleClass="dialog-box">
+    <EAD-confirmation-dialog (closeConfirmationPopUp)="closeConfirmationPopUp($event);">
+    </EAD-confirmation-dialog>
+</p-dialog>
+<div *ngIf="showLoader">
+    <EAD-loader></EAD-loader>
+</div>

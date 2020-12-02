@@ -1,0 +1,14 @@
+<div class="col-md-12 d-table">
+    <div class="d-table-row">
+        <div>
+            <img style='height: 25px;margin-right: 7px' src="assets/images/msg-1.svg"><span
+                class="f-16">{{confirmationMessageText}}</span>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 text-center">
+    <input type="button" class="button secondary-small ml-2 mr-2" value="{{'Common.no' | translate}}"
+        (click)="closeConfirmation(false);">
+    <input type="button" class="button primary-small" value="{{'Common.yes' | translate}}"
+        (click)="closeConfirmation(true);">
+</div>

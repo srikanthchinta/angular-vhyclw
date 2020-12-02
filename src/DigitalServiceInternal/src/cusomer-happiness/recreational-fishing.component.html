@@ -1,0 +1,230 @@
+<div class="card mt-4">
+    <div class="card-header">{{'CustomerHappinessDashbord.annualFishingLicense' | translate}}</div>
+    <div class="card-body">
+        <form [formGroup]="dispatchForm">
+            <div class="row" *ngIf="applictionRowData">
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label
+                            class="d-table-cell">{{'CustomerHappinessDashbord.applicationNumber' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.applicationNumber}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.applicationType' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.applicationType}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.licenseNo' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.licenseNumber}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.issueDate' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.issueDate |date: displayDateFormat}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.expiryDate' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.expiryDate |date: displayDateFormat}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.nameIn(English)' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.nameInEnglish}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.nameIn(Arabic)' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.nameInArabic}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.mobile' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.mobileNumber}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.address' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.fullAddress}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.city' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.cityName}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.emirate' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.emirateStateName}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0" *ngIf="this.applictionData.enableCardDispatched==true">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.dispatchDate' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-calendar placeholder={{datePlaceHolderFormat}} appendTo="body"
+                            dateFormat={{primeNgDateDisplayFormat}} [showIcon]="true" [minDate]="minDate"
+                            [maxDate]="maxDate" formControlName="dispatchDate">
+                        </p-calendar>
+                        <small class="d-block required"
+                            *ngIf="submitted && f.dispatchDate.errors">{{'CustomerHappinessDashbord.selectDispatchDate' | translate}}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0" *ngIf="this.applictionData.enableCardDispatched==true">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.dispatchVia' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-dropdown [options]="dispatchDropDown" styleClass="lang-RR" formControlName="dispatchVia"
+                            optionLabel="label"></p-dropdown>
+                        <small class="d-block required"
+                            *ngIf="submitted && f.dispatchVia.errors">{{'CustomerHappinessDashbord.selectDispatchVia' | translate}}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0" *ngIf="this.applictionData.enableCardDispatched==true">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.trackingNumber' | translate}}:</label>
+                        <input type="text" class="lang-RB trackNum d-table-cell border-1"
+                            formControlName="trackingNumber">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 d-table p-0" *ngIf="applicationType">
+                    <div class="d-table-row text-justify">
+                        <label class="d-table-cell">{{'CustomerHappinessDashbord.reIssueReason' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{applictionData.reissueReason}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group w-100">
+                    <label class="text-justify w-100">{{'CustomerHappinessDashbord.comments' | translate}}:</label>
+                    <textarea class="w-100 border-1" type="text" formControlName="comments"></textarea>
+                    <small class="required"
+                        *ngIf="submitted && f.comments.errors">{{'CustomerHappinessDashbord.enterComments' | translate}}
+                    </small>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-12" *ngIf="applicationType">
+            <div class="form-group text-justify">
+                <label class="text-justify w-100">{{'CustomerHappinessDashbord.uploadedFile' | translate}}:</label>
+                <p-table [value]="uploadedFiles" styleClass="pTable">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 100px;">{{'CustomerHappinessDashbord.serialNumber' | translate}}</th>
+                            <th>{{'CustomerHappinessDashbord.uploadDate' | translate}}</th>
+                            <th>{{'CustomerHappinessDashbord.fileNames' | translate}}</th>
+                            <th style="width: 80px;"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{rowData.uploadedDate |date:displayDateFormatWithHHMM}}</td>
+                            <td>{{rowData.customerFileName}}</td>
+                            <td><i class="pi pi-download" title="{{'Common.download' | translate}}"
+                                    (click)="customeFileDownload(rowData)"></i></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="row action-menu ml-1 mr-1 mb-2" *ngIf="applictionRowData">
+            <div>
+                <input class="button secondary-small" type="button"
+                    value="{{'CustomerHappinessDashbord.cancel' | translate}}" (click)="backToDashBoard();"> &nbsp;
+            </div>
+            <div *ngIf="this.applictionData.enableApproved==true">
+                <input class="button primary-small" type="button"
+                    value="{{'CustomerHappinessDashbord.approved' | translate}}" (click)="approvedAction();"> &nbsp;
+            </div>
+            <div *ngIf="this.applictionData.enableRequireMoreInfo==true">
+                <input class="button primary-small" type="button"
+                    value="{{'CustomerHappinessDashbord.requireMoreInformation' | translate}}"
+                    (click)="requireMoreAction();"> &nbsp;
+            </div>
+            <div *ngIf="this.applictionData.enableCardPrinted==true">
+                <input class="button primary-small" type="button"
+                    value="{{'CustomerHappinessDashbord.cardPrinted' | translate}}" (click)="cardPrintedAction();">
+                &nbsp;
+            </div>
+            <div *ngIf="this.applictionData.enableCardDispatched==true">
+                <input class="button primary-small" type="button"
+                    value="{{'CustomerHappinessDashbord.cardDispatched' | translate}}"
+                    (click)="cardDispatchedAction();"> &nbsp;
+            </div>
+            <div *ngIf="this.applictionData.enableClaim==true"><input type="button" class="button primary-small"
+                    value="{{'CustomerHappinessDashbord.claim' | translate}}" (click)="claimAction();"> &nbsp;</div>
+
+            <div *ngIf="this.applictionData.enableRevokeClaim==true"><input type="button" class="button primary-small"
+                    value="{{'CustomerHappinessDashbord.revoke' | translate}}" (click)="revokeClaimAction();">&nbsp;
+            </div>
+
+            <div *ngIf="this.applictionData.enableReClaim==true"><input type="button" class="button primary-small"
+                    value="{{'CustomerHappinessDashbord.reClaim' | translate}}" (click)="openDialog();"> &nbsp;</div>
+
+            <div *ngIf="this.applictionData.enableCardPrinted==true"><input type="button" class="button primary-small"
+                    (click)="printCardAction();" value="{{'CustomerHappinessDashbord.printCard' | translate}}"></div>
+        </div>
+        <div class="card w-100 m-bt-1">
+            <div class="card-header">{{'CustomerHappinessDashbord.applicationStatusHistory' | translate}}</div>
+            <div class="card-body" style="padding: 1.25rem 0px;">
+                <div class="col-md-12">
+                    <p-table [value]="historyData" [paginator]="true" #tabel [rows]="pageSize"
+                        [showCurrentPageReport]="true" [(first)]="first" styleClass="pTable lang-RR"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>{{'CustomerHappinessDashbord.fromStatus' | translate}}</th>
+                                <th pSortableColumn="toStatus">{{'CustomerHappinessDashbord.toStatus' | translate}}</th>
+                                <th pSortableColumn="completedBy">
+                                    {{'CustomerHappinessDashbord.completedBy' | translate}}
+                                </th>
+                                <th pSortableColumn="comments">{{'CustomerHappinessDashbord.comments' | translate}}</th>
+                                <th pSortableColumn="role">{{'CustomerHappinessDashbord.role' | translate}}</th>
+                                <th pSortableColumn="actionDate">{{'CustomerHappinessDashbord.actionDate' | translate}}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                            <tr>
+                                <td>{{rowData.fromStatus}}</td>
+                                <td>{{rowData.toStatus}}</td>
+                                <td>{{rowData.completedBy}}</td>
+                                <td>{{rowData.comments}}</td>
+                                <td>{{rowData.role}}</td>
+                                <td>{{rowData.actionDate| date: displayDateFormatWithHHMM}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <p-dialog header="{{'CustomerHappinessDashbord.confirmation' | translate}}" class="crad-header"
+                    [(visible)]="displayDialog" [baseZIndex]="10000">
+                    {{'CustomerHappinessDashbord.confirmationMessage' | translate}}
+                    <p-footer>
+                        <input type="button" class="button primary-small"
+                            value="{{'CustomerHappinessDashbord.yes' | translate}}" (click)="reClaimAction()"> &nbsp;
+                        <input type="button" class="button secondary-small"
+                            value="{{'CustomerHappinessDashbord.no' | translate}}" (click)="displayDialog=false">
+                    </p-footer>
+                </p-dialog>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="showLoadingIndicator">
+    <EAD-loader></EAD-loader>
+</div>

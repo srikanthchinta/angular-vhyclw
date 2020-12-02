@@ -1,0 +1,359 @@
+<form [formGroup]="permitSectionFormGroup">
+    <div class="text-right">
+        <a href="javascript:void(0);" onclick="$('.permit-collapse').removeClass('show');">
+            <img class="m-1" fill="#008761" src='./assets/images/collapse_all.svg'></a>
+        <a href="javascript:void(0);" onclick="$('.permit-collapse').addClass('show');">
+            <img class="m-1" fill="#008761" src='./assets/images/expand_all.svg'></a>
+    </div>
+    <div class="card m-bt-1">
+        <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseSix">
+            {{'EQSPermitSection.facilityProjectClass' | translate}}
+        </div>
+        <div id="collapseSix" class="collapse permit-collapse show">
+            <div class="card-body">
+                <div class="col-md-12 text-right">
+                    <input class="button secondary-small mb-1" type="button"
+                        value="{{'EQSFacilityProjectClass.addFacilityProjectClass' | translate}}"
+                        (click)="showFacilityProjectClassPopUp(true);" *ngIf=(canShowAddFacilityProjectClassButton)>
+                </div>
+                <p-table styleClass="pTable" [value]="facilityProjectClassDetails" [paginator]="true"
+                    [(first)]="faciliityProjectGridFirstPage" [rows]="gridPageSize">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                            <th>{{'Common.applicationNumber' | translate}}</th>
+                            <th>{{'EQSFacilityProjectClass.facilityProjectClass' | translate}}</th>
+                            <th style="width: 10%;">{{'EQSFacilityProjectClass.totalScore' | translate}}</th>
+                            <th class="actionColumnWidth"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{rowData.applicationNumber}}</td>
+                            <td>{{rowData.facilityProjectClass}}</td>
+                            <td>{{rowData.totalScore}}</td>
+                            <td class="text-center">
+                                <span class="pi-icons" *ngIf="(rowData.isFacilityProjectClassReadOnly)"
+                                    (click)="showFacilityProjectClassPopUp();">
+                                    <i class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                                </span>
+                                <span class="pi-icons" *ngIf="(!rowData.isFacilityProjectClassReadOnly)"
+                                    (click)="showFacilityProjectClassPopUp();">
+                                    <i class="pi pi-pencil" title="{{'Common.edit' | translate}}"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <div class="card m-bt-1">
+        <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseTwo">
+            {{'EQSPermitSection.requestForAssistance' | translate}}
+        </div>
+        <div id="collapseTwo" class="collapse permit-collapse">
+            <div class="card-body">
+                <div class="col-md-12 text-right" *ngIf="!isPermitSectionReadOnly">
+                    <input class="button secondary-small mb-1" type="button"
+                        value="{{'Common.addRequestForAssistance' | translate}}" (click)="addRequestForAssistance();">
+                </div>
+                <p-table styleClass="pTable" [value]="requestForAssistance" [paginator]="true"
+                    [(first)]="requestForAssistanceGridFirstPage" [rows]="gridPageSize">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                            <th>{{'Common.assistanceType' | translate}}</th>
+                            <th>{{'Common.requestorComments' | translate}}</th>
+                            <th>{{'Common.respondent' | translate}}</th>
+                            <th>{{'Common.respondentComments' | translate}}</th>
+                            <th>{{'Common.status' | translate}}</th>
+                            <th style="width: 10%;">{{'Common.completionDate' | translate}}</th>
+                            <th style="width: 8%">{{'Common.dueDate' | translate}}</th>
+                            <th class="actionColumnWidth"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{rowData.assistanceType}}</td>
+                            <td>{{rowData.requestorComments}}</td>
+                            <td>{{rowData.taskWith}}</td>
+                            <td>{{rowData.respondentComments}}</td>
+                            <td>{{rowData.status}}</td>
+                            <td>{{rowData.completionDate | date: displayDateFormat}}</td>
+                            <td>{{rowData.dueDate | date: displayDateFormat}}</td>
+                            <td class="text-center">
+                                <span class="pi-icons" (click)="withdrawRequestForAssistance(rowData);"
+                                    *ngIf="(rowData.enableDelete && !isPermitSectionReadOnly)">
+                                    <i class="pi pi-undo" title="{{'Common.withdraw' | translate}}"></i>
+                                </span>
+                                <span class="pi-icons" (click)="viewRequestForAssistance(rowData);">
+                                    <i *ngIf="rowData.enableRespondent" class="pi pi-pencil" title="{{'Common.edit' | translate}}"></i>
+                                    <i *ngIf="!rowData.enableRespondent" class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <div class="card m-bt-1">
+        <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseThree">
+            {{'EQSPermitSection.permitConditions' | translate}}
+        </div>
+        <div id="collapseThree" class="collapse permit-collapse">
+            <div class="card-body">
+                <div class="col-md-12 text-right" *ngIf="!isPermitSectionReadOnly">
+                    <input class="button secondary-small mb-1" type="button"
+                        value="{{'EQSPermitConditions.addPermitConditions' | translate}}"
+                        (click)="showPermitConditionsPopUp();">
+                </div>
+                <p-table styleClass="pTable" [value]="permitConditions" [paginator]="true"
+                    [(first)]="permitConditionsGirdFirstPage" [rows]="gridPageSize">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                            <th pSortableColumn="permitConditionGroupSector" style="width: 15%;">
+                                {{'EQSPermitSection.permitConditionGroupSector' | translate}}
+                                <p-sortIcon field="permitConditionGroupSector"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="permitConditionNumber" style="width: 14%;">
+                                {{'EQSPermitSection.permitConditionNumber' | translate}}
+                                <p-sortIcon field="permitConditionNumber"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="permitCondition">{{'EQSPermitSection.permitCondition' | translate}}
+                                <p-sortIcon field="permitCondition"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="status" style="width: 6%;">{{'Common.status' | translate}}
+                                <p-sortIcon field="status"></p-sortIcon>
+                            </th>
+                            <th class="actionColumnWidth" style="width: 6%;"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{rowData.permitConditionGroupName}}</td>
+                            <td>{{rowData.permitConditionLabel}}</td>
+                            <td>{{rowData.permitConditionName}}</td>
+                            <td>{{rowData.status}}</td>
+                            <td class="text-center" *ngIf="(rowData.isActive)">
+                                <span class="pi-icons" (click)="updatePermitConditionStatus(rowData);"
+                                    *ngIf="!isPermitSectionReadOnly">
+                                    <i class="pi pi-times" title="{{'Common.deactivate' | translate}}"></i>
+                                </span>
+                            </td>
+                            <td class="text-center" *ngIf="(!rowData.isActive)">
+                                <span class="pi-icons" (click)="updatePermitConditionStatus(rowData);"
+                                    *ngIf="!isPermitSectionReadOnly">
+                                    <i class="pi pi-check" title="{{'Common.activate' | translate}}"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <div class="card m-bt-1">
+        <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseFour">
+            {{'EQSPermitSection.taskHistory' | translate}}
+        </div>
+        <div id="collapseFour" class="collapse permit-collapse">
+            <div class="card-body">
+                <p-table styleClass="pTable" [value]="taskHistory" [paginator]="true"
+                    [(first)]="taskHistoryGridFirstPage" [rows]="gridPageSize">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                            <th pSortableColumn="status">{{'Common.status' | translate}}
+                                <p-sortIcon field="status"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="actionBy">{{'Common.actionBy' | translate}}
+                                <p-sortIcon field="actionBy"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="actionRole">{{'Common.actionRole' | translate}}
+                                <p-sortIcon field="actionRole"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="actionDate">{{'Common.actionDate' | translate}}
+                                <p-sortIcon field="actionDate"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="dueDate">{{'Common.dueDate' | translate}}
+                                <p-sortIcon field="dueDate"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="isOverDueText">{{'EQSPermitSection.iSDelayed' | translate}}
+                                <p-sortIcon field="isOverDueText"></p-sortIcon>
+                            </th>
+                            <th>{{'Common.internalComments' | translate}}</th>
+                            <th class="actionColumnWidth"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{rowIndex+1}}</td>
+                            <td>{{rowData.status}}</td>
+                            <td>{{rowData.actionBy}}</td>
+                            <td>{{rowData.actionRole}}</td>
+                            <td>{{rowData.actionDate | date: displayDateFormat }}</td>
+                            <td>{{rowData.dueDate | date: displayDateFormat}}</td>
+                            <td>{{rowData.isOverDueText}}</td>
+                            <td>{{rowData.internalComment}}</td>
+                            <td class="text-center">
+                                <span class="pi-icons" (click)="showTaskHistoryPopUp(rowData);">
+                                    <i class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <div class="card m-bt-1">
+        <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseFive">
+            {{'EQSPermitSection.recommendation' | translate}}
+        </div>
+        <div id="collapseFive" class="collapse permit-collapse">
+            <div class="card-body text-justify">
+                <div class="col-md-12 d-table mb-1" *ngIf="!isPermitSectionReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSPermitSection.studyRequired' | translate}}:</label>
+                        <p-checkbox class="d-table-cell" formControlName="studyRequired" [binary]="true"
+                            [readonly]="isPermitSectionReadOnly" (onChange)="setStudyRequired();">
+                        </p-checkbox>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(studyRequired.touched || isFormSubmitted) && studyRequired.invalid && studyRequired.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required">{{'Common.isRequiredPre' | translate}}{{'EQSPermitSection.studyRequired' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="isPermitSectionReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSPermitSection.studyRequested' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{studyRequested.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="studyRequired.value && !isPermitSectionReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSPermitSection.selectStudy' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-dropdown class="d-table-cell" [options]="studies" formControlName="studyId"></p-dropdown>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(studyId.touched || isFormSubmitted) && studyId.invalid && studyId.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required">{{'Common.isRequiredPre' | translate}}{{'EQSPermitSection.selectStudy' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="studyRequired.value && isPermitSectionReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSPermitSection.selectedStudy' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{study.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.externalComments' | translate}}:</label>
+                        <textarea class="d-table-cell w-100 h-150" formControlName="externalComments"
+                            [readonly]="isPermitSectionReadOnly"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.internalComments' | translate}}:</label>
+                        <textarea class="d-table-cell w-100 h-150" formControlName="internalComments"
+                            [readonly]="isAllowedActionReadOnly"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="isDelayed.value">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.delayJustification' | translate}}<span
+                                class="required">*</span>:</label>
+                        <textarea class="d-table-cell w-100 h-150" formControlName="delayJustification"
+                            [readonly]="isPermitSectionReadOnly"></textarea>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(delayJustification.touched || isFormSubmitted) && delayJustification.invalid && delayJustification.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required">{{'Common.isRequiredPre' | translate}}{{'Common.delayJustification' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.sME' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{isSMERequested.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.status' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{status.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="!isAllowedActionReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.recommendedAction' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-dropdown class="d-table-cell" [options]="recommendedActionOptions"
+                            formControlName="recommendedActionId"></p-dropdown>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(recommendedActionId.touched || isFormSubmitted) && recommendedActionId.invalid && recommendedActionId.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required">{{'Common.isRequiredPre' | translate}}{{'Common.recommendedAction' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 text-center mt-1" *ngIf="!isAllowedActionReadOnly">
+                    <input class="button primary-small m-1" type="button" value="{{'Common.submit' | translate}}"
+                        (click)="saveRecommendationDetails();">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<p-dialog header="{{'EQSPermitSection.requestForAssistance' | translate}}"
+    [(visible)]="displayRequestForAssistancePopUp" [modal]="true" styleClass="dialog-box" [draggable]="false"
+    [resizable]="false">
+    <eqs-add-view-request-for-assistance (closeRequestForAssistancePopUp)="closeRequestForAssistancePopUp();"
+        (loadRequestForAssistanceDetails)="loadRequestForAssistanceDetails($event);">
+    </eqs-add-view-request-for-assistance>
+</p-dialog>
+<p-dialog header="{{'EQSPermitSection.permitConditions' | translate}}" [(visible)]="displayPermitConditionsPopUp"
+    [modal]="true" [draggable]="false" styleClass="dialog-box" [resizable]="false">
+    <eqs-add-view-permit-conditions (closePermitConditionsPopUp)="closePermitConditionsPopUp();"
+        (getPermitConditionsDetails)="getPermitConditionsDetails();">
+    </eqs-add-view-permit-conditions>
+</p-dialog>
+<p-dialog header="{{'EQSPermitSection.facilityProjectClass' | translate}}"
+    [(visible)]="displayFacilityProjectClassPopUp" [modal]="true" [draggable]="false" styleClass="dialog-box"
+    [resizable]="false">
+    <eqs-add-view-facility-project-class (closeFacilityProjectClassPopUp)="closeFacilityProjectClassPopUp();"
+        (getFacilityProjectClassDetails)="getFacilityProjectClassDetails();">
+    </eqs-add-view-facility-project-class>
+</p-dialog>
+<p-dialog header="{{'EQSPermitSection.taskHistory' | translate}}" [(visible)]="displayTaskHistoryPopUp" [modal]="true"
+    [draggable]="false" styleClass="dialog-box" [resizable]="false">
+    <eqs-view-task-history (closeTaskHistoryPopUp)="closeTaskHistoryPopUp();">
+    </eqs-view-task-history>
+</p-dialog>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" styleClass="dialog-box"
+    [(visible)]="displayInformationPopUp" [resizable]="false">
+    <EAD-information-dialog (closeInformationPopUp)="closeInformationPopUp();">
+    </EAD-information-dialog>
+</p-dialog>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" [(visible)]="displayConfirmationPopUp"
+    [resizable]="false" styleClass="dialog-box">
+    <EAD-confirmation-dialog (closeConfirmationPopUp)="closeConfirmationPopUp($event);">
+    </EAD-confirmation-dialog>
+</p-dialog>
+<div *ngIf="showLoader">
+    <EAD-loader></EAD-loader>
+</div>

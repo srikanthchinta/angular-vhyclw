@@ -1,0 +1,51 @@
+<div id="wrapper" class="container-fluid" (clickOutside)="closeUserDropDown()">
+    <div class="row">
+        <div class="col-md-4 pl-1">
+            <div class="hamburger-menu justify-content-center" (click)="openNav()" *ngIf="isUserLogin">
+                <div class="hamburger-icon">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="header-logo">
+                <a class="navbar-brand">
+                    <img src="assets/images/EAD_Logo_Big.svg" alt="EAD logo" class="img-responsive w-100">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex" [ngClass]="isUserLogin ? 'justify-content-end' : 'justify-content-start'">
+            <div class="language-switcher" (click)="settingAppLanguage();">
+                <a style="cursor: pointer;">
+                    <span *ngIf="isAppLanguageEnglish">عربي</span>
+                    <span *ngIf="!isAppLanguageEnglish">English</span>
+                </a>
+            </div>
+            <div *ngIf="isUserLogin" class="user-menu" (click)="showPanel()">
+                <img class="userLogo" [src]="userProfilePic">
+                <div class="userMenu">
+                    <span style="font-weight: bold;">{{userName}}</span>
+                </div>
+                <p-listbox *ngIf="userPanel" [options]="roles" [(ngModel)]="selectedRole" styleClass="userdropdown"
+                    (onClick)="roleChange($event)" optionLabel="label"></p-listbox>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="mySidenav" class="sidenav" (clickOutside)="closeNav($event)">
+    <a href="javascript:void(0)" class="closebtn" id="closebtn" (click)="closeNav($event)">
+        <img src="assets/images/close.svg" style="width: 28px;">
+    </a>
+    <div class="menu-section">
+        <img (click)="navigateTo($event)" src="assets/images/EAD_Logo_Big.svg" class="menu-logo" alt="EAD Logo">
+        <hr />
+        <div *ngFor="let menuItem of menuItems">
+            <a [routerLink]="[menuItem.url]" class="menu-item" (click)="closeNav($event);"
+                (click)="menuItemClicked(menuItem.url);">
+                <img src={{menuItem.icon}} style="width: 22px;"><span
+                    [ngClass]="{'padingLeft' : isAppLanguageEnglish, 'padingRight' : !isAppLanguageEnglish}">{{menuItem.title}}</span></a>
+        </div>
+    </div>
+</div>

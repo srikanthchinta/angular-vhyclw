@@ -1,0 +1,447 @@
+<div class="text-right">
+    <a href="javascript:void(0);" onclick=" $('.std-collapse').removeClass('show');">
+        <img class="m-1" fill="#008761" src='./assets/images/collapse_all.svg'></a>
+    <a href="javascript:void(0);" onclick=" $('.std-collapse').addClass('show');">
+        <img class="m-1" fill="#008761" src='./assets/images/expand_all.svg'></a>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseOne">
+        {{'EQSPermitSection.internalForms' | translate}}
+    </div>
+    <div id="collapseOne" class="collapse std-collapse show">
+        <div class="card-body">
+            <p-table styleClass="pTable" [value]="internalForms" [paginator]="true" [(first)]="first"
+                [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'EQSPermitSection.formName' | translate}}</th>
+                        <th>{{'Common.createdBy' | translate}}</th>
+                        <th>{{'Common.createdOn' | translate}}</th>
+                        <th class="actionColumnWidth"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.formName}}</td>
+                        <td>{{rowData.createdBy}}</td>
+                        <td>{{rowData.createdOn | date: displayDateFormat}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" (click)="viewRequestAndReviewFormPopUp(rowData);">
+                                <i class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseTwo">
+        {{'EQSStudies.submittedStudyHistory' | translate}}
+    </div>
+    <div id="collapseTwo" class="collapse std-collapse">
+        <div class="card-body">
+            <p-table styleClass="pTable" [value]="studies" [paginator]="true" [(first)]="first" [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'Common.applicationNumber' | translate}}</th>
+                        <th>{{'EQSStudies.studyType' | translate}}</th>
+                        <th>{{'Common.eCOCompany' | translate}}</th>
+                        <th>{{'Common.status' | translate}}</th>
+                        <th>{{'Common.requestedOn' | translate}}</th>
+                        <th>{{'Common.submittedOn' | translate}}</th>
+                        <th class="actionColumnWidth"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.applicationNumber}}</td>
+                        <td>{{rowData.studyOrReportType}}</td>
+                        <td>{{rowData.ecoConsultantName}}</td>
+                        <td>{{rowData.statusName}}</td>
+                        <td>{{rowData.requestedOn | date: displayDateFormat}}</td>
+                        <td>{{rowData.submittedOn | date: displayDateFormat}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" (click)="addRequestForAssistance(rowData);"
+                                *ngIf=(!rowData.isReadOnly)>
+                                <i class="pi pi-user-plus" title="{{'Common.addRequestForAssistance' | translate}}"></i>
+                            </span>
+                            <span class="pi-icons" (click)="getSubmittedStudyHistory(rowData);">
+                                <i class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="row mb-1">
+                <div class="col-md-6 d-table"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="lang-RB col-md-6 d-table">
+                    {{'EQSStudies.studyHistory' | translate}}:
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-11 d-table">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSStudies.study' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{study.value}}</span>
+                    </div>
+                </div>
+            </div>
+            <p-table styleClass="pTable" [value]="submittedStudyHistory" [paginator]="true" [(first)]="first"
+                [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'Common.eCOCompany' | translate}}</th>
+                        <th>{{'Common.requestedOn' | translate}}</th>
+                        <th>{{'Common.submittedOn' | translate}}</th>
+                        <th>{{'Common.status' | translate}}</th>
+                        <th>{{'Common.studyScore' | translate}}</th>
+                        <th class="actionColumnWidth"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.ecoConsultantName}}</td>
+                        <td>{{rowData.requestToECOOn | date: displayDateFormat }}</td>
+                        <td>{{rowData.submittedToEADOn | date: displayDateFormat }}</td>
+                        <td>{{rowData.statusNameEn}}</td>
+                        <td>{{rowData.ecoScore}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" (click)="viewUploadedStudyPopUp(rowData);">
+                                <i class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseThree">
+        {{'EQSStudies.requestForAssistance' | translate}}
+    </div>
+    <div id="collapseThree" class="collapse std-collapse">
+        <div class="card-body">
+            <p-table styleClass="pTable" [value]="requestForAssistance" [paginator]="true" [(first)]="first"
+                [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th>{{'Common.assistanceType' | translate}}</th>
+                        <th>{{'Common.studyOrReportName' | translate}}</th>
+                        <th>{{'Common.requestorComments' | translate}}</th>
+                        <th>{{'Common.respondent' | translate}}</th>
+                        <th>{{'Common.respondentComments' | translate}}</th>
+                        <th>{{'Common.status' | translate}}</th>
+                        <th>{{'Common.completionDate' | translate}}</th>
+                        <th>{{'Common.dueDate' | translate}}</th>
+                        <th class="actionColumnWidth"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.assistanceType}}</td>
+                        <td>{{rowData.studyOrReportName}}</td>
+                        <td>{{rowData.requestorComments}}</td>
+                        <td>{{rowData.taskWith}}</td>
+                        <td>{{rowData.respondentComments}}</td>
+                        <td>{{rowData.status}}</td>
+                        <td>{{rowData.completionDate | date: displayDateFormat}}</td>
+                        <td>{{rowData.dueDate | date: displayDateFormat}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" (click)="withdrawRequestForAssistance(rowData);"
+                                *ngIf="(rowData.enableDelete && !isStudiesReadOnly)">
+                                <i class="pi pi-undo" title="{{'Common.withdraw' | translate}}"></i>
+                            </span>
+                            <span class="pi-icons" (click)="viewRequestForAssistance(rowData);">
+                                <i *ngIf="rowData.enableRespondent" class="pi pi-pencil"
+                                    title="{{'Common.edit' | translate}}"></i>
+                                <i *ngIf="!rowData.enableRespondent" class="pi pi-eye"
+                                    title="{{'Common.view' | translate}}"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseFour">
+        {{'EQSStudies.taskHistory' | translate}}
+    </div>
+    <div id="collapseFour" class="collapse std-collapse">
+        <div class="card-body">
+            <p-table styleClass="pTable" [value]="taskHistory" [paginator]="true" [(first)]="first"
+                [rows]="gridPageSize">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="serialNumberColumnWidth">{{'Common.serialNumber' | translate}}</th>
+                        <th pSortableColumn="status">{{'Common.status' | translate}}
+                            <p-sortIcon field="status"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="actionBy">{{'Common.actionBy' | translate}}
+                            <p-sortIcon field="actionBy"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="actionRole">{{'Common.actionRole' | translate}}
+                            <p-sortIcon field="actionRole"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="actionDate">{{'Common.actionDate' | translate}}
+                            <p-sortIcon field="actionDate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="dueDate">{{'Common.dueDate' | translate}}
+                            <p-sortIcon field="dueDate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="isOverDueText">{{'EQSPermitSection.iSDelayed' | translate}}
+                            <p-sortIcon field="isOverDueText"></p-sortIcon>
+                        </th>
+                        <th>{{'Common.internalComments' | translate}}</th>
+                        <th class="actionColumnWidth"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{rowIndex+1}}</td>
+                        <td>{{rowData.status}}</td>
+                        <td>{{rowData.actionBy}}</td>
+                        <td>{{rowData.actionRole}}</td>
+                        <td>{{rowData.actionDate | date: displayDateFormat}}</td>
+                        <td>{{rowData.dueDate | date: displayDateFormat}}</td>
+                        <td>{{rowData.isOverDueText}}</td>
+                        <td>{{rowData.internalComment}}</td>
+                        <td class="text-center">
+                            <span class="pi-icons" (click)="viewTaskHistory(rowData);">
+                                <i class="pi pi-eye" title="{{'Common.view' | translate}}"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="card m-bt-1">
+    <div class="card-header cusorPointer" data-toggle="collapse" href="#collapseFive">
+        {{'EQSStudies.recommendation' | translate}}
+    </div>
+    <div id="collapseFive" class="collapse std-collapse">
+        <div class="card-body text-justify">
+            <form [formGroup]="studiesFormGroup">
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSStudies.compnayName' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{companyName.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.enableStudyScore' | translate}}:</label>
+                        <p-checkbox class="d-table-cell" formControlName="enableStudyScore" [binary]="true"
+                            (onChange)="enableStudyScoreSelected();" [readonly]="isStudiesReadOnly">
+                        </p-checkbox>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="(enableStudyScore.value) && (!isStudiesReadOnly)">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.evaluationSheet' | translate}}<span
+                                class="required">*</span>:<small class="d-table-cell">{{fileChooseInfo}}</small></label>
+                        <p-fileUpload name="files[]" customUpload="true" multiple="multiple"
+                            chooseLabel="{{fileChoose}}" uploadLabel="{{uploadFileLabel}}" cancelLabel="{{fileDelete}}"
+                            maxFileSize={{maxFileUploadSize}} accept={{fileTypesToAllowUpload}}
+                            (uploadHandler)="uploadEvaluationSheet($event);"
+                            (onClear)="removeAllUploadedEvaluationSheets();" (onRemove)="removeEvaluationSheet($event);"
+                            (onSelect)="selectEvaluationDocumentToUpload();" invalidFileSizeMessageSummary=""
+                            invalidFileSizeMessageDetail={{maxFileSizeAllowedInfo}} invalidFileTypeMessageSummary=""
+                            invalidFileTypeMessageDetail={{allowedFileTypesInfo}}>
+                        </p-fileUpload>
+                    </div>
+                    <div class="d-table-row">
+                        <span class="d-table-cell"></span>
+                        <small *ngIf=(evaluationSheetRequired)
+                            class="required d-table-cell">{{'Common.isRequiredPre' | translate}}{{'Common.evaluationSheet' | translate}}{{'Common.isRequired' | translate}}</small>
+                        <small *ngIf=(evaluationDocumentsToBeUploaded)
+                            class="required d-table-cell">{{'Common.evaluationSheetToBeUploaded' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="(enableStudyScore.value) && (isStudiesReadOnly)">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.evaluationSheet' | translate}}:</label>
+                        <a href="javascript:void(0)" style="color: blue;" title="{{'Common.download' | translate}}"
+                            (click)="downloadDocument(evaluationSheetDocumentId.value, evaluationSheetFileName.value);">{{evaluationSheetFileName.value}}</a>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="(enableStudyScore.value)">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.studyScore' | translate}}:</label>
+                        <input class="d-table-cell" type="text" maxlength="3" formControlName="studyScore"
+                            [readonly]="isStudiesReadOnly" [pKeyFilter]="shouldAllowOnlyNumbers">
+                    </div>
+                    <div class="d-table-row" *ngIf="!studyScore.valid">
+                        <span class="d-table-cell"></span>
+                        <small class="required d-table-cell">
+                            {{'EQSStudies.studyScoreRange' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSStudies.isAdditionalStudyRequired' | translate}}:</label>
+                        <p-checkbox class="d-table-cell" formControlName="additionalStudyRequired" [binary]="true"
+                            [readonly]="isStudiesReadOnly" (onChange)="setAdditionalStudyRequired();">
+                        </p-checkbox>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="(additionalStudyRequired.value) && (!isStudiesReadOnly)">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSStudies.studyType' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-dropdown class="d-table-cell" [options]="studyTypes" formControlName="studyTypeId">
+                        </p-dropdown>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(studyTypeId.touched || isFormSubmitted) && studyTypeId.invalid && studyTypeId.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small class="required d-table-cell">
+                            {{'Common.isRequiredPre' | translate}}{{'EQSStudies.studyType' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="(additionalStudyRequired.value) && (isStudiesReadOnly)">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'EQSStudies.studyType' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{studyType.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.externalComments' | translate}}:</label>
+                        <textarea class="d-table-cell w-100 h-150" formControlName="externalComments"
+                            [readonly]="isStudiesReadOnly"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.internalComments' | translate}}:</label>
+                        <textarea class="d-table-cell w-100 h-150" formControlName="internalComments"
+                            [readonly]="isAllowedActionReadOnly"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf=(isDelayed.value)>
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.delayJustification' | translate}}<span
+                                class="required">*</span>:</label>
+                        <textarea class="d-table-cell w-100 h-150" formControlName="delayJustification"
+                            [readonly]="isStudiesReadOnly"></textarea>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(delayJustification.touched || isFormSubmitted) && delayJustification.invalid && delayJustification.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small class="required d-table-cell">
+                            {{'Common.isRequiredPre' | translate}}{{'Common.delayJustification' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf=(!isStudiesReadOnly)>
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.technicalReviewForm' | translate}}<span
+                                class="required">*</span>:<small
+                                class="d-table-cell">{{technicalReviewFormFileChooseInfo}}</small></label>
+                        <a href="javascript:void(0)" style="color: blue;" title="{{'Common.download' | translate}}"
+                            (click)="downLoadTechnicalReviewTemplate();">{{'Common.technicalReviewTemplate' | translate}}</a>
+                        <p-fileUpload name="files[]" customUpload="true" multiple="multiple"
+                            chooseLabel="{{fileChoose}}" uploadLabel="{{uploadFileLabel}}" cancelLabel="{{fileDelete}}"
+                            maxFileSize={{maxFileUploadSize}} accept=".PDF"
+                            (uploadHandler)="uploadTechnicalReviewForm($event);"
+                            (onClear)="removeAllUploadedTechnicalReviewForms();"
+                            (onRemove)="removeTechnicalTechnicalReviewForm($event);"
+                            (onSelect)="selectTechnicalDocumentToUpload();" invalidFileSizeMessageSummary=""
+                            invalidFileTypeMessageSummary="" invalidFileTypeMessageDetail={{allowedFileTypesInfo}}
+                            invalidFileSizeMessageDetail={{maxFileSizeAllowedInfo}}>
+                        </p-fileUpload>
+                    </div>
+                    <div class="d-table-row">
+                        <span class="d-table-cell"></span>
+                        <small *ngIf=(technicalTemplateRequired)
+                            class="required d-table-cell">{{'Common.isRequiredPre' | translate}}{{'Common.technicalReviewForm' | translate}}{{'Common.isRequired' | translate}}</small>
+                        <small *ngIf=(technicalTemplatesToBeUploaded)
+                            class="required d-table-cell">{{'Common.technicaTempalteToBeUploaded' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="(isStudiesReadOnly)">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.technicalReviewForm' | translate}}:</label>
+                        <a href="javascript:void(0)" style="color: blue;" title="{{'Common.download' | translate}}"
+                            (click)="downloadDocument(annextureADocumentId.value, annextureAFileName.value);">{{annextureAFileName.value}}</a>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.status' | translate}}:</label>
+                        <span class="lang-RB d-table-cell">{{status.value}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 d-table mb-1" *ngIf="!isAllowedActionReadOnly">
+                    <div class="d-table-row">
+                        <label class="d-table-cell">{{'Common.recommendedAction' | translate}}<span
+                                class="required">*</span>:</label>
+                        <p-dropdown class="d-table-cell" [options]="recommendedActions"
+                            formControlName="recommendedActionId"></p-dropdown>
+                    </div>
+                    <div class="d-table-row"
+                        *ngIf="(recommendedActionId.touched || isFormSubmitted) && recommendedActionId.invalid && recommendedActionId.errors.required">
+                        <span class="d-table-cell"></span>
+                        <small
+                            class="required d-table-cell">{{'Common.isRequiredPre' | translate}}{{'Common.recommendedAction' | translate}}{{'Common.isRequired' | translate}}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 text-center mt-1" *ngIf="!isAllowedActionReadOnly">
+                    <input class="button primary-small m-1" type="button" value="{{'Common.submit' | translate}}"
+                        (click)="saveStudyDetails();">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<p-dialog header="Request for Assistance" styleClass="dialog-box" [(visible)]="displayRequestForAssistancePopUp"
+    [modal]="true" [draggable]="false" [resizable]="false">
+    <eqs-add-view-request-for-assistance (closeRequestForAssistancePopUp)="closeRequestForAssistancePopUp();"
+        (loadRequestForAssistanceDetails)="loadRequestForAssistanceDetails($event);">
+    </eqs-add-view-request-for-assistance>
+</p-dialog>
+<p-dialog header="Study Details" styleClass="dialog-box" [(visible)]="displayUploadedStudiesReportsPopUp" [modal]="true"
+    [draggable]="false" [resizable]="false">
+    <eqs-view-uploaded-studies-reports-details (closeUploadedStudyPopUp)="closeUploadedStudyPopUp();">
+    </eqs-view-uploaded-studies-reports-details>
+</p-dialog>
+<p-dialog header="{{'EQSPermitSection.taskHistory' | translate}}" [(visible)]="displayTaskHistoryPopUp" [modal]="true"
+    [draggable]="false" styleClass="dialog-box" [resizable]="false">
+    <eqs-view-task-history (closeTaskHistoryPopUp)="closeTaskHistoryPopUp();">
+    </eqs-view-task-history>
+</p-dialog>
+<p-dialog header="{{'Common.internalFormsDetails' | translate}} - {{formName}}"
+    [(visible)]="displayRequestAndReviewFormPopUp" [modal]="true" [draggable]="false" styleClass="dialog-box"
+    [resizable]="false">
+    <eqs-request-and-review-form (closeRequestAndReviewPopUp)="closeRequestAndReviewPopUp();">
+    </eqs-request-and-review-form>
+</p-dialog>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" styleClass="dialog-box"
+    [(visible)]="displayInformationPopUp" [resizable]="false">
+    <EAD-information-dialog (closeInformationPopUp)="closeInformationPopUp();">
+    </EAD-information-dialog>
+</p-dialog>
+<p-dialog header="Digital Services" [modal]="true" [draggable]="false" [(visible)]="displayConfirmationPopUp"
+    [resizable]="false" styleClass="dialog-box">
+    <EAD-confirmation-dialog (closeConfirmationPopUp)="closeConfirmationPopUp($event);">
+    </EAD-confirmation-dialog>
+</p-dialog>
+<div *ngIf="showLoader">
+    <EAD-loader></EAD-loader>
+</div>

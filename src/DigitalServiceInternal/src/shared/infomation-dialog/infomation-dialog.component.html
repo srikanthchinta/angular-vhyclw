@@ -1,0 +1,10 @@
+<div class="col-md-12 d-table">
+    <div class="d-table-row">
+        <div *ngFor="let errorMessage of errorMessages">
+            <img  style='height: 25px;margin-right: 7px' src="assets/images/msg-{{informationType}}.svg"><span class="f-16">{{errorMessage}}</span>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 text-center m-1">
+    <input type="button" class="button primary-small" value="{{'Common.ok' | translate}}" (click)="closeInformation();">
+</div>

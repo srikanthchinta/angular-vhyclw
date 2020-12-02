@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-header text-center">{{'LoginForm.signIn' | translate}}</div>
+                <div class="card-body">
+                    <form [formGroup]="loginForm" class="text-justify">
+                        <div class="form-group">
+                            <label for="username">{{'LoginForm.username' | translate}}</label>
+                            <input #userName type="text" formControlName="username" class="form-control input-text"
+                                [ngClass]="{ 'is-invalid': submitted && f.username.errors }" (change)="onInputChange()"/>
+                            <small class="marginstyle fontstyle required"
+                                *ngIf="submitted && f.username.errors">{{'LoginForm.usernameIsrequired' | translate}}
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">{{'LoginForm.password' | translate}}</label>
+                            <input type="password" formControlName="password" class="form-control input-text"
+                                [ngClass]="{ 'is-invalid': submitted && f.password.errors }" (change)="onInputChange()"/>
+                            <small class="marginstyle fontstyle required"
+                                *ngIf="submitted && f.password.errors">{{'LoginForm.passwordIsrequired' | translate}}
+                            </small>
+                            <small class="marginstyle fontstyle required"
+                                *ngIf="inValidCredentials && !f.password.errors && !f.username.errors">{{'LoginForm.invalidCredentials' | translate}}
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <button (click)="onLoginSubmit()"
+                                class="button primary-small w-100">{{'LoginForm.login' | translate}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="showLoadingIndicator">
+    <EAD-loader></EAD-loader>
+</div>
